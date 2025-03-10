@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riverview Church Teaser</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Teaser container */
+        .church-teaser {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            font-size: 16px;
+        }
+        
+        /* Header styling */
+        .teaser-header {
+            background: #3a86ff; /* Default theme color - change as needed */
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Edit mode styling */
+        .edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .edit-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .edit-icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .edit-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow: auto;
+            padding: 20px;
+        }
+        
+        .edit-panel.active {
+            display: block;
+        }
+        
+        .edit-form {
+            background: white;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+        }
+        
+        .tab-editor {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        
+        .tab-editor h3 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .form-button {
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .save-button {
+            background: #3a86ff;
+            color: white;
+        }
+        
+        .cancel-button {
+            background: #f1f1f1;
+            color: #333;
+        }
+        
+        .church-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 15px;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+        }
+        
+        .church-info {
+            flex-grow: 1;
+        }
+        
+        .church-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .church-tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        /* Tabs navigation */
+        .tabs {
+            display: flex;
+            background-color: #f5f5f5;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 12px 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-grow: 1;
+            text-align: center;
+            color: #555;
+        }
+        
+        .tab:hover {
+            background-color: #e9e9e9;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #3a86ff; /* Match with header color */
+            background-color: white;
+            color: #3a86ff; /* Match with header color */
+        }
+        
+        /* Tab content */
+        .tab-content {
+            display: none;
+            padding: 25px;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Content styling */
+        .tab-content h2 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 20px;
+        }
+        
+        .tab-content p {
+            margin-bottom: 15px;
+        }
+        
+        .tab-content ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-content li {
+            margin-bottom: 8px;
+        }
+        
+        /* Call to action */
+        .cta-button {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            background-color: #3a86ff; /* Match with header color */
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cta-button:hover {
+            background-color: #2a76ef; /* Slightly darker */
+        }
+        
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .church-name {
+                font-size: 20px;
+            }
+            
+            .tab {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            .tab-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="church-teaser">
+        <!-- Header section with logo and name -->
+        <div class="teaser-header">
+            <!-- Replace with your church logo URL -->
+            <img src="https://via.placeholder.com/150" alt="Riverview Church Logo" class="church-logo">
+            <div class="church-info">
+                <h1 class="church-name">Riverview Church</h1>
+                <div class="church-tagline">A place to belong</div>
+            </div>
+        </div>
+        
+        <!-- Tabs navigation -->
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('welcome')">Welcome</button>
+            <button class="tab" onclick="openTab('connect')">Connect</button>
+            <button class="tab" onclick="openTab('grow')">Grow</button>
+            <button class="tab" onclick="openTab('serve')">Serve</button>
+            <button class="tab" onclick="openTab('give')">Give</button>
+        </div>
+        
+        <!-- Welcome tab -->
+        <div id="welcome" class="tab-content active">
+            <h2>Welcome to Riverview Church</h2>
+            <p>We're a community of believers committed to loving God and loving people. Whether you're exploring faith for the first time or have been following Jesus for years, there's a place for you here.</p>
+            <p>Join us for worship every Sunday at 9:00 AM and 11:00 AM.</p>
+            <a href="https://riverviewonline.churchcenter.com/home" class="cta-button">Plan Your Visit</a>
+        </div>
+        
+        <!-- Connect tab -->
+        <div id="connect" class="tab-content">
+            <h2>Find Your Community</h2>
+            <p>We believe life is better together. Our community groups are the perfect place to build meaningful relationships and grow in your faith journey.</p>
+            <ul>
+                <li>Family Groups</li>
+                <li>Young Adults</li>
+                <li>Men's & Women's Groups</li>
+                <li>Special Interest Groups</li>
+            </ul>
+            <a href="https://riverviewonline.churchcenter.com/home" class="cta-button">Find a Group</a>
+        </div>
+        
+        <!-- Grow tab -->
+        <div id="grow" class="tab-content">
+            <h2>Grow Your Faith</h2>
+            <p>Deepen your relationship with God through worship, biblical teaching, and discipleship opportunities.</p>
+            <ul>
+                <li>Sunday Services</li>
+                <li>Bible Studies</li>
+                <li>Prayer Gatherings</li>
+                <li>Spiritual Growth Resources</li>
+            </ul>
+            <a href="https://riverviewonline.churchcenter.com/home" class="cta-button">Explore Resources</a>
+        </div>
+        
+        <!-- Serve tab -->
+        <div id="serve" class="tab-content">
+            <h2>Make a Difference</h2>
+            <p>Use your unique gifts to serve others in our church and community. We have opportunities for everyone to contribute.</p>
+            <ul>
+                <li>Sunday Team</li>
+                <li>Children's Ministry</li>
+                <li>Outreach Programs</li>
+                <li>Missions Opportunities</li>
+            </ul>
+            <a href="https://riverviewonline.churchcenter.com/home" class="cta-button">Start Serving</a>
+        </div>
+        
+        <!-- Give tab -->
+        <div id="give" class="tab-content">
+            <h2>Partner With Us</h2>
+            <p>Your generosity fuels our mission to reach people with the love of Christ. Every gift makes a difference in transforming lives in our community and beyond.</p>
+            <p>We're committed to financial transparency and faithful stewardship of every donation.</p>
+            <a href="https://riverviewonline.churchcenter.com/home" class="cta-button">Give Now</a>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(tabName) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Deactivate all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate selected tab
+            const selectedTab = document.querySelector(`.tab[onclick="openTab('${tabName}')"]`);
+            selectedTab.classList.add('active');
+        }
+        
+        // Optional: Auto-rotate tabs (uncomment to enable)
+        /*
+        let currentTabIndex = 0;
+        const tabNames = ['welcome', 'connect', 'grow', 'serve', 'give'];
+        
+        function rotateTabs() {
+            currentTabIndex = (currentTabIndex + 1) % tabNames.length;
+            openTab(tabNames[currentTabIndex]);
+        }
+        
+        // Rotate tabs every 5 seconds
+        setInterval(rotateTabs, 5000);
+        */
+    </script>
+</body>
+</html>
