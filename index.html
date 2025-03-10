@@ -1,3 +1,5 @@
+made while going to my 15min break this morning
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -426,3 +428,417 @@
     </script>
 </body>
 </html>
+<br>
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHLMEC Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+        
+        .teaser-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: #1a365d;
+            padding: 25px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .header-text {
+            color: white;
+        }
+        
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: #f1f1f1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab {
+            padding: 12px 15px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: #1a365d;
+            border-bottom: 3px solid #1a365d;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 25px;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .tab-content h2 {
+            color: #1a365d;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .tab-content p {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .tab-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .tab-content li {
+            margin-bottom: 8px;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .service-item {
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .service-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #1a365d;
+        }
+        
+        .contact-btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background-color: #1a365d;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .contact-btn:hover {
+            background-color: #15294b;
+        }
+        
+        .image-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .image-item {
+            border-radius: 8px;
+            overflow: hidden;
+            height: 150px;
+        }
+        
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .image-item:hover img {
+            transform: scale(1.05);
+        }
+        
+        .contact-info {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .contact-info p {
+            margin-bottom: 8px;
+        }
+        
+        .contact-info strong {
+            color: #1a365d;
+        }
+        
+        @media (max-width: 500px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px 15px;
+            }
+            
+            .tab {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+            
+            .tab-content {
+                padding: 20px 15px;
+            }
+            
+            .service-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="teaser-container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://www.ohlmec.com.au/wp-content/uploads/2021/09/cropped-OHLMEC_logo_transparent.png" alt="OHLMEC Logo">
+            </div>
+            <div class="header-text">
+                <div class="company-name">OHLMEC</div>
+                <div class="tagline">Specialised Maintenance & Fabrication Services</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab('about')">About</button>
+            <button class="tab" onclick="openTab('services')">Services</button>
+            <button class="tab" onclick="openTab('projects')">Projects</button>
+            <button class="tab" onclick="openTab('safety')">Safety</button>
+            <button class="tab" onclick="openTab('contact')">Contact</button>
+        </div>
+        
+        <div id="about" class="tab-content active">
+            <h2>About OHLMEC</h2>
+            <p>OHLMEC is a Western Australian owned and operated engineering company delivering specialised maintenance and fabrication services to the mining, oil & gas and construction industries across Western Australia.</p>
+            <p>Our team combines extensive industry experience with modern equipment and innovative approaches to deliver exceptional results for our clients.</p>
+            <ul>
+                <li>Based in Western Australia with operations throughout the state</li>
+                <li>Experienced team of qualified tradespeople</li>
+                <li>Commitment to safety and quality</li>
+                <li>Client-focused approach to every project</li>
+            </ul>
+            <a href="https://www.ohlmec.com.au/about/" target="_blank" class="contact-btn">Learn More About Us</a>
+        </div>
+        
+        <div id="services" class="tab-content">
+            <h2>Our Services</h2>
+            <p>OHLMEC provides comprehensive maintenance and fabrication services tailored to the unique requirements of mining, oil & gas, and construction operations.</p>
+            
+            <div class="service-grid">
+                <div class="service-item">
+                    <div class="service-icon">🔧</div>
+                    <div>Mechanical Maintenance</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">⚙️</div>
+                    <div>Equipment Rebuilds</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🏗️</div>
+                    <div>Steel Fabrication</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🔩</div>
+                    <div>Shutdowns & Outages</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🚧</div>
+                    <div>Site Installation</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">📋</div>
+                    <div>Project Management</div>
+                </div>
+            </div>
+            
+            <a href="https://www.ohlmec.com.au/services/" target="_blank" class="contact-btn">View All Services</a>
+        </div>
+        
+        <div id="projects" class="tab-content">
+            <h2>Recent Projects</h2>
+            <p>OHLMEC has successfully delivered a wide range of projects across Western Australia. Our portfolio demonstrates our capabilities and commitment to excellence.</p>
+            
+            <div class="image-container">
+                <div class="image-item">
+                    <img src="https://www.ohlmec.com.au/wp-content/uploads/2022/01/service-image-3.jpg" alt="OHLMEC Project">
+                </div>
+                <div class="image-item">
+                    <img src="https://www.ohlmec.com.au/wp-content/uploads/2022/01/service-image-5.jpg" alt="OHLMEC Project">
+                </div>
+                <div class="image-item">
+                    <img src="https://www.ohlmec.com.au/wp-content/uploads/2022/01/service-image-1.jpg" alt="OHLMEC Project">
+                </div>
+                <div class="image-item">
+                    <img src="https://www.ohlmec.com.au/wp-content/uploads/2022/01/service-image-4.jpg" alt="OHLMEC Project">
+                </div>
+            </div>
+            
+            <a href="https://www.ohlmec.com.au/projects/" target="_blank" class="contact-btn">Explore Our Projects</a>
+        </div>
+        
+        <div id="safety" class="tab-content">
+            <h2>Safety & Quality</h2>
+            <p>At OHLMEC, safety and quality are at the core of everything we do. We maintain rigorous standards to ensure the wellbeing of our team and the delivery of exceptional work.</p>
+            
+            <ul>
+                <li><strong>Safety Management System</strong> - Comprehensive policies and procedures</li>
+                <li><strong>Training & Competency</strong> - Regular training and skills development</li>
+                <li><strong>Risk Management</strong> - Thorough assessment and mitigation processes</li>
+                <li><strong>Quality Assurance</strong> - Rigorous quality control at every stage</li>
+                <li><strong>Environmental Responsibility</strong> - Sustainable practices and compliance</li>
+            </ul>
+            
+            <p>Our commitment to safety and quality has earned us an excellent reputation with clients across industries.</p>
+            
+            <a href="https://www.ohlmec.com.au/safety/" target="_blank" class="contact-btn">Learn About Our Approach</a>
+        </div>
+        
+        <div id="contact" class="tab-content">
+            <h2>Get In Touch</h2>
+            <p>Contact OHLMEC today to discuss how we can support your maintenance and fabrication requirements. Our team is ready to provide expert advice and solutions.</p>
+            
+            <div class="contact-info">
+                <p><strong>Phone:</strong> (08) 9479 5050</p>
+                <p><strong>Email:</strong> info@ohlmec.com.au</p>
+                <p><strong>Address:</strong> 29 Guma Close, Wangara, WA 6065</p>
+                <p><strong>Hours:</strong> Monday-Friday, 7am-4pm</p>
+            </div>
+            
+            <a href="https://www.ohlmec.com.au/contact/" target="_blank" class="contact-btn">Contact Us Now</a>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            // Hide all tab content
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+            
+            // Deactivate all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activate selected tab
+            const selectedTab = document.querySelector(`.tab[onclick="openTab('${tabName}')"]`);
+            selectedTab.classList.add('active');
+        }
+        
+        // Optional: Auto-rotate tabs
+        let currentTabIndex = 0;
+        const tabNames = ['about', 'services', 'projects', 'safety', 'contact'];
+        
+        function rotateTabs() {
+            currentTabIndex = (currentTabIndex + 1) % tabNames.length;
+            openTab(tabNames[currentTabIndex]);
+        }
+        
+        // Rotate tabs every 5 seconds
+        const tabInterval = setInterval(rotateTabs, 5000);
+        
+        // Stop rotation when user interacts with tabs
+        const tabs = document.getElementsByClassName('tab');
+        for (let i = 0; i < tabs.length; i++) {
+            tabs[i].addEventListener('click', function() {
+                clearInterval(tabInterval);
+            });
+        }
+    </script>
+</body>
+</html>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
