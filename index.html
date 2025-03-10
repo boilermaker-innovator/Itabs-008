@@ -1,3 +1,588 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👍i Widget with iTabs Button in Stats</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .page-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        /* 👍i Widget Styles */
+        #thumbs-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        #thumbs-button {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        #thumbs-button:hover {
+            transform: scale(1.05);
+        }
+        
+        #i-indicator {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 28px;
+            height: 28px;
+            background: #4361ee;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-style: italic;
+            font-weight: bold;
+        }
+        
+        .thumbs-popup {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+            display: none;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .popup-title {
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 18px;
+        }
+        
+        .reaction-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        .reaction-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+        }
+        
+        .emoji {
+            font-size: 28px;
+            margin-right: 15px;
+        }
+        
+        .thumbs-close-button {
+            color: #4361ee;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+        
+        .stats-item {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #4361ee;
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+        
+        /* Stats Header with iTabs Button */
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .itabs-button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #4361ee;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-style: italic;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+        
+        .itabs-button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* iTabs Teaser Popup */
+        .itabs-popup {
+            position: absolute;
+            bottom: 0;
+            right: 340px;
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: none;
+            z-index: 2001;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .itabs-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .itabs-popup-title {
+            font-weight: bold;
+            font-size: 16px;
+            color: #333;
+        }
+        
+        .itabs-popup-close {
+            width: 24px;
+            height: 24px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .itabs-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        
+        .itabs-tab {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 2px solid transparent;
+            color: #666;
+        }
+        
+        .itabs-tab.active {
+            border-bottom: 2px solid #4361ee;
+            color: #4361ee;
+            font-weight: 600;
+        }
+        
+        .itabs-tab-content {
+            display: none;
+        }
+        
+        .itabs-tab-content.active {
+            display: block;
+            animation: fadeContent 0.3s ease;
+        }
+        
+        @keyframes fadeContent {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .itabs-popup-content p {
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .time-stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .time-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .itabs-cta {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .itabs-cta:hover {
+            background-color: #3a4fd7;
+        }
+        
+        /* Mobile optimization */
+        @media (max-width: 768px) {
+            .itabs-popup {
+                position: absolute;
+                bottom: 80px;
+                right: 0;
+                width: 320px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .thumbs-popup, .itabs-popup {
+                width: 280px;
+            }
+            
+            .reaction-option {
+                padding: 10px 14px;
+            }
+            
+            .emoji {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <h1>👍i Widget Demo</h1>
+        <p>This demo shows the 👍i widget with an iTabs button in the statistics popup.</p>
+        <p>Click the 👍i button in the bottom right, select a reaction, and then you'll see the statistics popup with an iTabs button in the header.</p>
+    </div>
+
+    <!-- 👍i Widget -->
+    <div id="thumbs-widget">
+        <div id="thumbs-button" onclick="toggleThumbs()">
+            👍
+            <div id="i-indicator">i</div>
+        </div>
+        
+        <div id="reactions-popup" class="thumbs-popup">
+            <div class="popup-title">What do you think?</div>
+            
+            <div class="reaction-option" onclick="saveReaction('helpful')">
+                <span class="emoji">👍</span> This is helpful
+            </div>
+            
+            <div class="reaction-option" onclick="saveReaction('love')">
+                <span class="emoji">❤️</span> I love this
+            </div>
+            
+            <div class="reaction-option" onclick="saveReaction('amazing')">
+                <span class="emoji">🔥</span> This is amazing
+            </div>
+            
+            <div class="reaction-option" onclick="saveReaction('informative')">
+                <span class="emoji">💡</span> Very informative
+            </div>
+            
+            <div class="thumbs-close-button" onclick="closeThumbsPopups()">
+                Close
+            </div>
+        </div>
+        
+        <div id="stats-popup" class="thumbs-popup">
+            <div class="stats-header">
+                <div class="popup-title">Reaction Statistics</div>
+                <button class="itabs-button" id="itabsButton">i</button>
+            </div>
+            
+            <div id="stats-content">
+                <p>No reactions yet</p>
+            </div>
+            
+            <div class="thumbs-close-button" onclick="closeThumbsPopups()">
+                Close
+            </div>
+        </div>
+        
+        <!-- iTabs Teaser Popup -->
+        <div class="itabs-popup" id="itabsPopup">
+            <div class="itabs-popup-header">
+                <div class="itabs-popup-title">iTabs: Enhance Your Content</div>
+                <button class="itabs-popup-close" id="closeItabsPopup">&times;</button>
+            </div>
+            
+            <div class="itabs-tabs">
+                <div class="itabs-tab active" data-tab="overview">Overview</div>
+                <div class="itabs-tab" data-tab="features">Features</div>
+                <div class="itabs-tab" data-tab="benefits">Benefits</div>
+            </div>
+            
+            <div class="itabs-tab-content active" id="overview-content">
+                <p>Love the 👍i feature? iTabs expands on this concept with comprehensive tabbed content that's easy to create and share.</p>
+                
+                <div class="time-stat">
+                    <span>Average time saved:</span>
+                    <span class="time-number">15+ hrs/week</span>
+                </div>
+                
+                <p>Create engaging, interactive content in minutes instead of hours.</p>
+            </div>
+            
+            <div class="itabs-tab-content" id="features-content">
+                <p>Key features include:</p>
+                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                    <li>Multi-tab content organization</li>
+                    <li>Automatic tab rotation</li>
+                    <li>Mobile-optimized design</li>
+                    <li>Rich media support</li>
+                    <li>Easy content updates</li>
+                    <li>Complete engagement analytics</li>
+                </ul>
+                <p>Everything you need to create powerful interactive content.</p>
+            </div>
+            
+            <div class="itabs-tab-content" id="benefits-content">
+                <div class="time-stat">
+                    <span>Content creation time:</span>
+                    <span class="time-number">↓ 73%</span>
+                </div>
+                <div class="time-stat">
+                    <span>User engagement:</span>
+                    <span class="time-number">↑ 42%</span>
+                </div>
+                <p>iTabs is the perfect evolution of your 👍i widget - create rich, engaging content that drives results.</p>
+            </div>
+            
+            <button class="itabs-cta">Learn More About iTabs</button>
+        </div>
+    </div>
+
+    <script>
+        // 👍i Widget Functionality
+        var reactions = {
+            helpful: 3,
+            love: 5,
+            amazing: 2,
+            informative: 4
+        };
+        
+        // Try to load saved data
+        try {
+            var savedReactions = localStorage.getItem('thumbs-widget-reactions');
+            if (savedReactions) {
+                reactions = JSON.parse(savedReactions);
+            }
+        } catch(e) {
+            console.log('Could not load saved reactions');
+        }
+        
+        // Toggle reactions popup
+        function toggleThumbs() {
+            closeThumbsPopups();
+            document.getElementById('reactions-popup').style.display = 'block';
+        }
+        
+        // Save reaction and show stats
+        function saveReaction(type) {
+            reactions[type]++;
+            
+            try {
+                localStorage.setItem('thumbs-widget-reactions', JSON.stringify(reactions));
+            } catch(e) {
+                console.log('Could not save reaction');
+            }
+            
+            closeThumbsPopups();
+            updateStats();
+            document.getElementById('stats-popup').style.display = 'block';
+        }
+        
+        // Close all popups
+        function closeThumbsPopups() {
+            document.getElementById('reactions-popup').style.display = 'none';
+            document.getElementById('stats-popup').style.display = 'none';
+            document.getElementById('itabsPopup').style.display = 'none';
+        }
+        
+        // Update statistics display
+        function updateStats() {
+            var total = reactions.helpful + reactions.love + reactions.amazing + reactions.informative;
+            var statsContent = document.getElementById('stats-content');
+            
+            if (total === 0) {
+                statsContent.innerHTML = '<p>No reactions yet</p>';
+                return;
+            }
+            
+            var helpfulPercent = Math.round((reactions.helpful / total) * 100) || 0;
+            var lovePercent = Math.round((reactions.love / total) * 100) || 0;
+            var amazingPercent = Math.round((reactions.amazing / total) * 100) || 0;
+            var informativePercent = Math.round((reactions.informative / total) * 100) || 0;
+            
+            var html = '<p><strong>Total reactions:</strong> ' + total + '</p>';
+            
+            html += '<div class="stats-item">';
+            html += '<div>👍 This is helpful: ' + reactions.helpful + ' (' + helpfulPercent + '%)</div>';
+            html += '<div class="progress-bar"><div class="progress" style="width:' + helpfulPercent + '%"></div></div>';
+            html += '</div>';
+            
+            html += '<div class="stats-item">';
+            html += '<div>❤️ I love this: ' + reactions.love + ' (' + lovePercent + '%)</div>';
+            html += '<div class="progress-bar"><div class="progress" style="width:' + lovePercent + '%"></div></div>';
+            html += '</div>';
+            
+            html += '<div class="stats-item">';
+            html += '<div>🔥 This is amazing: ' + reactions.amazing + ' (' + amazingPercent + '%)</div>';
+            html += '<div class="progress-bar"><div class="progress" style="width:' + amazingPercent + '%"></div></div>';
+            html += '</div>';
+            
+            html += '<div class="stats-item">';
+            html += '<div>💡 Very informative: ' + reactions.informative + ' (' + informativePercent + '%)</div>';
+            html += '<div class="progress-bar"><div class="progress" style="width:' + informativePercent + '%"></div></div>';
+            html += '</div>';
+            
+            statsContent.innerHTML = html;
+            
+            // Animate progress bars
+            setTimeout(function() {
+                var bars = document.querySelectorAll('.progress');
+                bars.forEach(function(bar) {
+                    var width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(function() {
+                        bar.style.width = width;
+                    }, 50);
+                });
+            }, 50);
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            
+            // Add event listeners for iTabs functionality
+            const itabsButton = document.getElementById('itabsButton');
+            const itabsPopup = document.getElementById('itabsPopup');
+            const closeItabsPopup = document.getElementById('closeItabsPopup');
+            const tabs = document.querySelectorAll('.itabs-tab');
+            
+            // Toggle iTabs popup
+            itabsButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                itabsPopup.style.display = 'block';
+            });
+            
+            // Close iTabs popup
+            closeItabsPopup.addEventListener('click', function() {
+                itabsPopup.style.display = 'none';
+            });
+            
+            // Handle tab switching
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab content
+                    document.querySelectorAll('.itabs-tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show selected tab content
+                    const tabName = this.getAttribute('data-tab');
+                    document.getElementById(`${tabName}-content`).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
 made while going to my 15min break this morning
 
 <!DOCTYPE html>
