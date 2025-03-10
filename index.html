@@ -583,7 +583,505 @@
 </body>
 </html>
 <br>
-I asked to find a story I can use for iTabs demo, the i aske to creat a template to show how itabs works.  These i tabs are just static 
+<br>
+here is story with less but have 3 tabs
+<br>
+<br>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTabs Prototype - Healthcare Article</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            color: #3498db;
+            margin-top: 1.5rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        /* iTabs System Styling */
+        .itab-indicator {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background-color: #3498db;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-style: italic;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            top: -8px;
+            margin-left: 1px;
+            transition: transform 0.2s ease;
+        }
+        
+        .itab-indicator:hover {
+            transform: scale(1.2);
+        }
+        
+        .itab-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .itab-content {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            overflow: hidden;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .itab-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .itab-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            background-color: white;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .itab-logo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .itab-title-area h3 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        
+        .itab-title-area p {
+            margin: 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* Tab Navigation */
+        .itab-tabs-nav {
+            display: flex;
+            background-color: #f1f5f9;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .itab-tab {
+            padding: 12px 15px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        .itab-tab:hover {
+            color: #3498db;
+        }
+        
+        .itab-tab.active {
+            color: #3498db;
+            background-color: white;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .itab-tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.3s;
+        }
+        
+        .itab-tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .itab-info-item {
+            margin-bottom: 12px;
+        }
+        
+        .itab-label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+        
+        .itab-value {
+            font-size: 16px;
+        }
+        
+        .itab-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            line-height: 1;
+        }
+        
+        .itab-close:hover {
+            opacity: 0.8;
+        }
+        
+        .itab-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        
+        .itab-website {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .itab-website:hover {
+            background-color: #2980b9;
+        }
+
+        /* Publication Info */
+        .publication-info {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .date {
+            font-weight: bold;
+        }
+        
+        /* Mobile Optimization */
+        @media (max-width: 576px) {
+            .itab-content {
+                width: 95%;
+            }
+            
+            .itab-header {
+                padding: 12px 15px;
+            }
+            
+            .itab-logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .itab-title-area h3 {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article>
+        <h1>Local Tech Startup Revolutionizes Healthcare Access</h1>
+        
+        <div class="publication-info">
+            <span class="location">ADELAIDE</span>, <span class="date">March 10, 2025</span>
+        </div>
+        
+        <p>A new healthcare platform developed by Adelaide-based startup HealthBridge<span class="itab-indicator" onclick="openITab('healthbridge')">i</span> is transforming how regional communities access specialized medical care.</p>
+        
+        <p>The platform, which launched last month after securing $3.2 million in funding from Southbank Ventures, connects patients in remote areas with specialists through secure video consultations and AI-powered preliminary assessments.</p>
+        
+        <p>"We're solving a critical problem that affects millions of Australians living outside major cities," said Sarah Chen, CEO of HealthBridge. "When the nearest specialist might be 300 kilometers away, many health conditions go untreated or are diagnosed too late."</p>
+        
+        <p>The company's platform integrates with existing electronic health record systems provided by MediSoft Solutions and has already been adopted by Regional Health Network<span class="itab-indicator" onclick="openITab('regionalhealth')">i</span>, which operates 12 hospitals across South Australia and the Northern Territory.</p>
+        
+        <p>Dr. James Morton, Chief Medical Officer at Regional Health Network, highlighted the platform's impact: "In just the first month, we've facilitated over 500 specialist consultations that would have otherwise required patients to travel to Adelaide or Darwin. The cost savings and improved patient outcomes are significant."</p>
+        
+        <p>HealthBridge developed the technology using secure infrastructure from Australian data services provider SecureCloud, ensuring all patient information remains protected and compliant with Australian healthcare data regulations.</p>
+        
+        <p>The South Australian government has expressed interest in expanding the program statewide through its Digital Health Initiative, potentially bringing specialized healthcare access to over 400,000 residents in remote communities.</p>
+        
+        <p>"This is exactly the kind of innovation we need to see in Australian healthcare," said Michael Thompson, health policy analyst at Australian Healthcare Review. "It combines technical innovation with practical solutions to real problems facing our healthcare system."</p>
+        
+        <p>HealthBridge plans to expand to other states by the end of 2025 and is currently developing additional features including integration with wearable health monitoring devices and automated prescription services.</p>
+    </article>
+    
+    <!-- iTabs Modals -->
+    <div id="itabs-modal" class="itab-modal">
+        <div class="itab-content">
+            <div class="itab-header">
+                <div class="itab-logo">
+                    <img id="itab-logo-img" src="" alt="">
+                </div>
+                <div class="itab-title-area">
+                    <h3 id="itab-title"></h3>
+                    <p id="itab-subtitle"></p>
+                </div>
+                <button class="itab-close" onclick="closeITab()">&times;</button>
+            </div>
+            
+            <div class="itab-tabs-nav" id="itab-tabs-nav">
+                <!-- Tab buttons will be added dynamically -->
+            </div>
+            
+            <div id="itab-tab-contents">
+                <!-- Tab contents will be added dynamically -->
+            </div>
+            
+            <div class="itab-footer">
+                <a id="itab-website" href="#" class="itab-website" target="_blank">Visit Website</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // iTabs Data
+        const itabsData = {
+            'healthbridge': {
+                title: 'HealthBridge',
+                subtitle: 'Healthcare Technology Company',
+                logo: 'https://via.placeholder.com/80',
+                website: 'https://example.com',
+                tabs: [
+                    {
+                        title: 'Overview',
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">Industry</div>
+                                <div class="itab-value">Healthcare Technology</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Founded</div>
+                                <div class="itab-value">2023</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Headquarters</div>
+                                <div class="itab-value">Adelaide, South Australia</div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: 'Services',
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">Key Products</div>
+                                <div class="itab-value">Remote consultation platform, AI diagnostic assistance tools</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Target Market</div>
+                                <div class="itab-value">Rural hospitals, regional clinics, remote patients</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Technology</div>
+                                <div class="itab-value">Secure video consultations, AI diagnostics, medical record integration</div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: 'Contact',
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">Email</div>
+                                <div class="itab-value">info@healthbridge.com.au</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Phone</div>
+                                <div class="itab-value">+61 8 8293 4500</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Address</div>
+                                <div class="itab-value">Level 6, 108 North Terrace, Adelaide SA 5000</div>
+                            </div>
+                        `
+                    }
+                ]
+            },
+            'regionalhealth': {
+                title: 'Regional Health Network',
+                subtitle: 'Healthcare Provider',
+                logo: 'https://via.placeholder.com/80/e74c3c/ffffff',
+                website: 'https://example.com',
+                tabs: [
+                    {
+                        title: 'Overview', 
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">Type</div>
+                                <div class="itab-value">Healthcare Provider</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Coverage</div>
+                                <div class="itab-value">12 hospitals across SA and NT</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Patients Served</div>
+                                <div class="itab-value">780,000 annually</div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: 'Services',
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">Employees</div>
+                                <div class="itab-value">6,500+</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Services</div>
+                                <div class="itab-value">Primary care, emergency services, specialized care</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">HealthBridge Integration</div>
+                                <div class="itab-value">Implemented in 8 regional hospitals</div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: 'Locations',
+                        content: `
+                            <div class="itab-info-item">
+                                <div class="itab-label">South Australia</div>
+                                <div class="itab-value">8 hospitals including Port Augusta, Whyalla, and Port Lincoln</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Northern Territory</div>
+                                <div class="itab-value">4 hospitals including Katherine and Tennant Creek</div>
+                            </div>
+                            <div class="itab-info-item">
+                                <div class="itab-label">Headquarters</div>
+                                <div class="itab-value">77 North Terrace, Adelaide SA 5000</div>
+                            </div>
+                        `
+                    }
+                ]
+            }
+        };
+
+        // Open iTabs Modal
+        function openITab(id) {
+            const data = itabsData[id];
+            if (data) {
+                document.getElementById('itab-title').textContent = data.title;
+                document.getElementById('itab-subtitle').textContent = data.subtitle;
+                document.getElementById('itab-logo-img').src = data.logo;
+                document.getElementById('itab-website').href = data.website;
+                
+                // Generate tab navigation
+                const tabsNav = document.getElementById('itab-tabs-nav');
+                const tabContents = document.getElementById('itab-tab-contents');
+                
+                let tabsNavHTML = '';
+                let tabContentsHTML = '';
+                
+                data.tabs.forEach((tab, index) => {
+                    const isActive = index === 0 ? 'active' : '';
+                    tabsNavHTML += `<button class="itab-tab ${isActive}" onclick="switchTab(${index})">${tab.title}</button>`;
+                    tabContentsHTML += `<div id="itab-tab-${index}" class="itab-tab-content ${isActive}">${tab.content}</div>`;
+                });
+                
+                tabsNav.innerHTML = tabsNavHTML;
+                tabContents.innerHTML = tabContentsHTML;
+                
+                document.getElementById('itabs-modal').style.display = 'flex';
+            }
+        }
+        
+        // Close iTabs Modal
+        function closeITab() {
+            document.getElementById('itabs-modal').style.display = 'none';
+        }
+        
+        // Switch Tabs
+        function switchTab(tabIndex) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.itab-tab');
+            tabs.forEach((tab, index) => {
+                if (index === tabIndex) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Update tab contents
+            const tabContents = document.querySelectorAll('.itab-tab-content');
+            tabContents.forEach((content, index) => {
+                if (index === tabIndex) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('itabs-modal')) {
+                closeITab();
+            }
+        }
+    </script>
+</body>
+</html>
+<br>
+<br>
+<br>
+I asked to find a story I can use for iTabs demo, the i aske to creat a template to show how itabs works.  
 <br>
 <br>
 <!DOCTYPE html>
